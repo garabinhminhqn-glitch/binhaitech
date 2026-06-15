@@ -510,7 +510,7 @@
 
       <div class="form-card">
         <h3>Đăng ký tư vấn miễn phí</h3>
-        <form>
+        <form id="contact-form">
           <div class="form-group">
             <label for="name">Họ và tên *</label>
             <input type="text" id="name" name="name" placeholder="Nguyễn Văn A" required />
@@ -525,7 +525,7 @@
           </div>
           <div class="form-group">
             <label for="need">Mô tả nhu cầu của bạn</label>
-            <textarea id="need" name="message" placeholder="Doanh nghiệp của tôi cần tự động hóa quy trình..."></textarea>
+            <textarea id="message" name="message" placeholder="Doanh nghiệp của tôi cần tự động hóa quy trình..."></textarea>
           </div>
           <button type="submit" class="btn-submit">Gửi yêu cầu tư vấn →</button>
         </form>
@@ -553,23 +553,37 @@
 </footer>
 
 <script>
-  document.querySelector('form').addEventListener('submit', async function(e) {
-    e.preventDefault();
+  window.addEventListener('load', function() {
+    var form = document.getElementById('contact-form');
+    if (!form) {
+      console.log('Khong tim thay form!');
+      return;
+    }
+    console.log('Da tim thay form!');
 
-    fetch('https://n8n.binhaitech.com/webhook/lead-intake', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {'Content-Type': 'text/plain'},
-      body: JSON.stringify({
-        name: document.querySelector('[name="name"]').value,
-        phone: document.querySelector('[name="phone"]').value,
-        email: document.querySelector('[name="email"]').value,
-        message: document.querySelector('[name="message"]').value
-      })
-    }).then(() => {
-      alert('Cam on! Chung toi se lien he ban som!');
-    }).catch(err => {
-      console.error(err);
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      console.log('Form dang submit...');
+
+      var data = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        message: document.getElementById('message').value
+      };
+      console.log('Data:', JSON.stringify(data));
+
+      fetch('https://n8n.binhaitech.com/webhook/lead-intake', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'text/plain'},
+        body: JSON.stringify(data)
+      }).then(function() {
+        console.log('Da gui xong!');
+        alert('Cam on! Chung toi se lien he ban som!');
+      }).catch(function(err) {
+        console.log('Loi:', err);
+      });
     });
   });
 </script>
