@@ -510,7 +510,7 @@
 
       <div class="form-card">
         <h3>Đăng ký tư vấn miễn phí</h3>
-        <form action="https://n8n.binhaitech.com/webhook/lead-intake" method="POST" onsubmit="handleSubmit(event)">
+        <form id="contact-form">
           <div class="form-group">
             <label for="name">Họ và tên *</label>
             <input type="text" id="name" name="name" placeholder="Nguyễn Văn A" required />
@@ -553,34 +553,45 @@
 </footer>
 
 <script>
-  async function handleSubmit(e) {
+  document.getElementById('contact-form').addEventListener('submit', async function (e) {
     e.preventDefault();
+
     const form = e.target;
     const btn = form.querySelector('.btn-submit');
+    const card = form.closest('.form-card');
+
+    const name    = form.querySelector('#name').value.trim();
+    const phone   = form.querySelector('#phone').value.trim();
+    const email   = form.querySelector('#email').value.trim();
+    const message = form.querySelector('#need').value.trim();
 
     btn.textContent = 'Đang gửi...';
     btn.disabled = true;
 
     try {
-      await fetch(form.action, {
-        method: form.method,
+      const res = await fetch('https://n8n.binhaitech.com/webhook/lead-intake', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        body: JSON.stringify({ name, email, phone, message })
       });
-    } catch (_) {}
 
-    // Thay form bằng thông báo thành công
-    const card = form.closest('.form-card');
-    card.innerHTML = `
-      <div style="text-align:center;padding:40px 20px;">
-        <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
-        <h3 style="font-size:1.4rem;font-weight:800;margin-bottom:12px;color:#1d4ed8;">Cảm ơn!</h3>
-        <p style="color:#64748b;font-size:1rem;line-height:1.6;">
-          Chúng tôi sẽ liên hệ bạn trong <strong>24h!</strong><br/>
-          Hãy kiểm tra email và điện thoại nhé.
-        </p>
-      </div>`;
-  }
+      if (!res.ok) throw new Error('server_error');
+
+      card.innerHTML = `
+        <div style="text-align:center;padding:40px 20px;">
+          <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
+          <h3 style="font-size:1.4rem;font-weight:800;margin-bottom:12px;color:#1d4ed8;">Cảm ơn!</h3>
+          <p style="color:#64748b;font-size:1rem;line-height:1.6;">
+            Chúng tôi sẽ liên hệ bạn trong <strong>24h!</strong><br/>
+            Hãy kiểm tra email và điện thoại nhé.
+          </p>
+        </div>`;
+    } catch (_) {
+      btn.textContent = '⚠️ Có lỗi, thử lại!';
+      btn.style.background = '#dc2626';
+      btn.disabled = false;
+    }
+  });
 </script>
 
 </body>
