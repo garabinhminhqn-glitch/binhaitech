@@ -527,8 +527,13 @@
             <label for="need">Mô tả nhu cầu của bạn</label>
             <textarea id="message" name="message" placeholder="Doanh nghiệp của tôi cần tự động hóa quy trình..."></textarea>
           </div>
-          <button type="submit" class="btn-submit">Gửi yêu cầu tư vấn →</button>
+          <button type="submit" id="btn-submit" class="btn-submit">Gửi yêu cầu tư vấn →</button>
         </form>
+        <div id="success-msg" style="display:none; margin-top:24px; padding:20px 24px; background:#dcfce7; border:1.5px solid #16a34a; border-radius:12px; text-align:center;">
+          <div style="font-size:2rem; margin-bottom:8px;">✅</div>
+          <div style="font-size:1.05rem; font-weight:700; color:#15803d; margin-bottom:6px;">Cam on Binh!</div>
+          <div style="color:#166534; font-size:.95rem;">Chung toi se lien he ban trong 24h.<br/>Hay kiem tra email!</div>
+        </div>
       </div>
 
     </div>
@@ -565,6 +570,10 @@
       e.preventDefault();
       console.log('Form dang submit...');
 
+      var btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.textContent = 'Dang gui...';
+
       var data = {
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
@@ -580,9 +589,12 @@
         body: JSON.stringify(data)
       }).then(function() {
         console.log('Da gui xong!');
-        alert('Cam on! Chung toi se lien he ban som!');
+        form.style.display = 'none';
+        document.getElementById('success-msg').style.display = 'block';
       }).catch(function(err) {
         console.log('Loi:', err);
+        btn.disabled = false;
+        btn.textContent = 'Gui yeu cau tu van →';
       });
     });
   });
