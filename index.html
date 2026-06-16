@@ -529,11 +529,7 @@
           </div>
           <button type="submit" id="btn-submit" class="btn-submit">Gửi yêu cầu tư vấn →</button>
         </form>
-        <div id="success-msg" style="display:none; margin-top:24px; padding:20px 24px; background:#dcfce7; border:1.5px solid #16a34a; border-radius:12px; text-align:center;">
-          <div style="font-size:2rem; margin-bottom:8px;">✅</div>
-          <div style="font-size:1.05rem; font-weight:700; color:#15803d; margin-bottom:6px;">Cam on Binh!</div>
-          <div style="color:#166534; font-size:.95rem;">Chung toi se lien he ban trong 24h.<br/>Hay kiem tra email!</div>
-        </div>
+        <div id="success-msg" style="display:none; margin-top:24px; padding:20px 24px; background:#dcfce7; border:1.5px solid #16a34a; border-radius:12px; text-align:center; font-size:1.05rem; font-weight:700; color:#15803d;"></div>
       </div>
 
     </div>
@@ -589,8 +585,11 @@
         body: JSON.stringify(data)
       }).then(function() {
         console.log('Da gui xong!');
+        var tenKhach = document.getElementById('name').value;
+        var successMsg = document.getElementById('success-msg');
+        successMsg.innerHTML = '✅ Cam on ' + tenKhach + '!<br/>Chung toi se lien he ban trong 24h!';
         form.style.display = 'none';
-        document.getElementById('success-msg').style.display = 'block';
+        successMsg.style.display = 'block';
       }).catch(function(err) {
         console.log('Loi:', err);
         btn.disabled = false;
