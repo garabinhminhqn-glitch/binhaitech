@@ -556,30 +556,9 @@
   function handleSubmit(e) {
     e.preventDefault();
     const btn = e.target.querySelector('.btn-submit');
-
-    const data = {
-      customer_name: document.getElementById('name').value,
-      customer_phone: document.getElementById('phone').value,
-      customer_email: document.getElementById('email').value,
-      message: document.getElementById('need').value,
-      source: 'landing-page'
-    };
-
-    btn.textContent = 'Đang gửi...';
+    btn.textContent = '✓ Đã gửi! Chúng tôi sẽ liên hệ sớm.';
+    btn.style.background = '#16a34a';
     btn.disabled = true;
-
-    fetch('https://n8n.binhaitech.com/webhook/lead-intake?api_key=BINH_SECRET_2026', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(data)
-    }).then(function() {
-      btn.textContent = '✓ Đã gửi! Chúng tôi sẽ liên hệ sớm.';
-      btn.style.background = '#16a34a';
-    }).catch(function() {
-      btn.textContent = '✓ Đã gửi! Chúng tôi sẽ liên hệ sớm.';
-      btn.style.background = '#16a34a';
-    });
   }
 </script>
 
